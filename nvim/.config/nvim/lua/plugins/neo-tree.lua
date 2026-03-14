@@ -15,6 +15,7 @@ return {
       filesystem = {
         filtered_items = {
           hide_dotfiles = false,
+          hide_gitignored = false,     -- Скрывать файлы, добавленные в .gitignore
         },
       },
       enable_diagnostics = false,
