@@ -19,6 +19,6 @@ vim.diagnostic.config({
   update_in_insert = false, -- не обновлять в insert моде
   float = {
     border = "rounded",
-    source = true,         -- показывать источник ошибки (pyright / ruff)
+    source = false,         -- показывать источник ошибки (pyright / ruff)
   },
 })
