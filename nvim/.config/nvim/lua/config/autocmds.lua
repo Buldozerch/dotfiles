@@ -1,28 +1,5 @@
 local augroup = vim.api.nvim_create_augroup("UserConfig", { clear = true })
 
-vim.api.nvim_create_autocmd("BufReadPost", {
-  group = vim.api.nvim_create_augroup("CleanNoNameBuffers", { clear = true }),
-  callback = function()
-    -- Ищем все загруженные буферы без имени, с одной пустой строкой
-    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-      if vim.api.nvim_buf_is_loaded(buf) then
-        local name = vim.api.nvim_buf_get_name(buf)
-        local line_count = vim.api.nvim_buf_line_count(buf)
-
-        if name == "" and line_count == 1 then
-          local line = vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1]
-          if line == "" then
-            -- Удаляем буфер безопасно
-            vim.schedule(function()
-              pcall(vim.api.nvim_buf_delete, buf, { force = true })
-            end)
-          end
-        end
-      end
-    end
-  end,
-})
-
 -- highlight yanked text
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = augroup,

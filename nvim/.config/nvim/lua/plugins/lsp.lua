@@ -1,7 +1,14 @@
 local function setup()
   local capabilities = require("blink.cmp").get_lsp_capabilities()
+  local mason_ok, mason = pcall(require, "mason")
 
-  require("mason").setup({})
+  if mason_ok then
+    mason.setup({
+      ui = {
+        border = "rounded",
+      },
+    })
+  end
 
   vim.diagnostic.config({
     virtual_text = {
@@ -66,7 +73,14 @@ local function setup()
     },
   })
 
-  vim.lsp.config("pyright", { capabilities = capabilities })
+  vim.lsp.config("pyright", {
+    capabilities = capabilities,
+    handlers = {
+      ["window/showMessage"] = function() end,
+      ["window/logMessage"] = function() end,
+      ["$/progress"] = function() end,
+    },
+  })
 
   vim.lsp.config("rust_analyzer", { capabilities = capabilities })
   vim.lsp.config("ts_ls", { capabilities = capabilities })

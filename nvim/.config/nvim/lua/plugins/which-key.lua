@@ -22,13 +22,14 @@ local function setup()
     sort = { "group", "alphanum", "order" },
     spec = {
       { "<leader>f", group = "Find" },
-      { "<leader>h", group = "Harpoon/Git" },
+      { "<leader>h", group = "Harpoon/Git (1-5 jump)" },
       { "<leader>d", group = "Diagnostics" },
       { "<leader>s", group = "Split" },
       { "<leader>w", group = "Write/Quit" },
       { "<leader>g", group = "Git" },
       { "<leader>l", group = "LSP" },
       { "<leader>m", group = "Mason" },
+      { "<leader>n", group = "Noice" },
 
       { "<leader>ff", desc = "Find files" },
       { "<leader>fi", desc = "Find in files/" },
@@ -39,6 +40,11 @@ local function setup()
 
       { "<leader>ha", desc = "Add current file" },
       { "<leader>hh", desc = "Quick menu" },
+      { "<leader>1", hidden = true },
+      { "<leader>2", hidden = true },
+      { "<leader>3", hidden = true },
+      { "<leader>4", hidden = true },
+      { "<leader>5", hidden = true },
 
       { "[h", desc = "Git prev hunk" },
       { "]h", desc = "Git next hunk" },
@@ -63,8 +69,11 @@ local function setup()
       { "<leader>ls", desc = "LSP document symbols" },
       { "<leader>lS", desc = "LSP workspace symbols" },
       { "<leader>lf", desc = "LSP format buffer" },
-      { "<leader>mi", desc = "Mason install" },
+      { "<leader>mi", desc = "Mason install core" },
       { "<leader>mm", desc = "Mason UI" },
+      { "<leader>mu", desc = "Mason update registry" },
+      { "<leader>nh", desc = "Noice history" },
+      { "<leader>nd", desc = "Noice dismiss" },
 
       { "<leader>e", desc = "Toggle nvim-tree" },
       { "<leader>w", desc = "Save file" },
@@ -76,13 +85,6 @@ local function setup()
       { "<leader>sh", desc = "Split horizontally" },
       { "<leader>/", desc = "Clear search highlight" },
 
-      { "gsa", desc = "Surround add" },
-      { "gsd", desc = "Surround delete" },
-      { "gsr", desc = "Surround replace" },
-      { "gsf", desc = "Surround find right" },
-      { "gsF", desc = "Surround find left" },
-      { "gsh", desc = "Surround highlight" },
-      { "gsn", desc = "Surround update n lines" },
     },
   })
 end

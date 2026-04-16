@@ -16,6 +16,8 @@ local plugins = {
   { src = "https://github.com/wakatime/vim-wakatime.git" },
   { src = "https://github.com/folke/tokyonight.nvim.git" },
   { src = "https://github.com/lewis6991/gitsigns.nvim.git", config="gitsigns" },
+  { src = "https://github.com/folke/noice.nvim.git", config = "noice" },
+  { src = "https://github.com/MunifTanjim/nui.nvim.git" },
 
   { src = "https://github.com/folke/flash.nvim.git",         config = "flash" },
   {
@@ -37,7 +39,7 @@ for _, p in ipairs(plugins) do
   end
 
   if p.branch then
-    spec.version = p.branch
+    spec.branch = p.branch
   end
 
   if p.build then
