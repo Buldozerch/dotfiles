@@ -1,31 +1,22 @@
-return {
-  "nvim-telescope/telescope.nvim",
-  version = "*",
-  dependencies = {
-    "nvim-lua/plenary.nvim",
-    {
-      "nvim-telescope/telescope-fzf-native.nvim",
-      build = "make",
-    },
-  },
-  keys = {
-    { "<leader>ff", "<cmd>Telescope find_files<CR>", desc = "Find files" },
-    {
-      "<leader>fi",
-      function()
-        require("telescope.builtin").find_files({
-          search_dirs = { "files" },
-          no_ignore = true,   -- Игнорировать .gitignore для этой папки
-        })
-      end,
-      desc = "Find in files/",
-    },
-    { "<leader>fg", "<cmd>Telescope live_grep<CR>", desc = "Search by text" },
-    { "<leader>fw", "<cmd>Telescope grep_string<CR>", desc = "Search current word" },
-  },
-  config = function()
-    local telescope = require("telescope")
-    telescope.setup()
-    telescope.load_extension("fzf")
-  end,
-}
+local function setup()
+  local telescope = require("telescope")
+  local builtin = require("telescope.builtin")
+
+  telescope.setup({})
+
+  vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files" })
+
+  vim.keymap.set("n", "<leader>fi", function()
+    builtin.find_files({
+      search_dirs = { "files" },
+      no_ignore = true,
+    })
+  end, { desc = "Find in files/" })
+
+  vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Search by text" })
+  vim.keymap.set("n", "<leader>fw", builtin.grep_string, { desc = "Search current word" })
+  vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Find buffers" })
+  vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Find help tags" })
+end
+
+return { setup = setup }

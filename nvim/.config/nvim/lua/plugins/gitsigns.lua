@@ -1,26 +1,36 @@
-return {
-  "lewis6991/gitsigns.nvim",
-  config = function()
-    require("gitsigns").setup({
-      signs = {
-        add = { text = "▎" },
-        change = { text = "▎" },
-        delete = { text = "" },
-        topdelete = { text = "" },
-        changedelete = { text = "▎" },
-      },
-      on_attach = function(bufnr)
-        local gs = package.loaded.gitsigns
-        local map = vim.keymap.set
-        local opts = { buffer = bufnr }
+local function setup()
+  local gitsigns = require("gitsigns")
 
-        -- навигация по изменениям
-        map("n", "<leader>gn", gs.next_hunk, vim.tbl_extend("force", opts, { desc = "Next hunk" }))
-        map("n", "<leader>gp", gs.prev_hunk, vim.tbl_extend("force", opts, { desc = "Prev hunk" }))
+  gitsigns.setup({
+    signs = {
+      add = { text = "\u{2590}" }, -- ▏
+      change = { text = "\u{2590}" }, -- ▐
+      delete = { text = "\u{2590}" }, -- ◦
+      topdelete = { text = "\u{25e6}" }, -- ◦
+      changedelete = { text = "\u{25cf}" }, -- ●
+      untracked = { text = "\u{25cb}" }, -- ○
+    },
+    signcolumn = true,
+    current_line_blame = false,
+    on_attach = function(bufnr)
+      local map = vim.keymap.set
+      local function opts(desc)
+        return { buffer = bufnr, silent = true, desc = desc }
+      end
 
-        map("n", "<leader>gd", gs.diffthis, vim.tbl_extend("force", opts, { desc = "Diff this" }))
-        map("n", "<leader>gb", gs.blame_line, vim.tbl_extend("force", opts, { desc = "Blame line" }))
-      end,
-    })
-  end,
-}
+      map("n", "]h", gitsigns.next_hunk, opts("Git: Next hunk"))
+      map("n", "[h", gitsigns.prev_hunk, opts("Git: Prev hunk"))
+
+      map("n", "<leader>hs", gitsigns.stage_hunk, opts("Git: Stage hunk"))
+      map("n", "<leader>hr", gitsigns.reset_hunk, opts("Git: Reset hunk"))
+      map("n", "<leader>hp", gitsigns.preview_hunk, opts("Git: Preview hunk"))
+      map("n", "<leader>hb", function()
+        gitsigns.blame_line({ full = true })
+      end, opts("Git: Blame line"))
+      map("n", "<leader>hB", gitsigns.toggle_current_line_blame, opts("Git: Toggle inline blame"))
+      map("n", "<leader>hd", gitsigns.diffthis, opts("Git: Diff this"))
+    end,
+  })
+end
+
+return { setup = setup }

@@ -1,24 +1,61 @@
--- lua/plugins/harpoon.lua
-return {
-  "ThePrimeagen/harpoon",
-  branch = "harpoon2",
-  dependencies = { "nvim-lua/plenary.nvim" },
-  config = function()
-    local harpoon = require("harpoon")
-    harpoon:setup()
+local function setup()
+  local harpoon = require("harpoon")
+  local conf = require("telescope.config").values
 
-    local map = vim.keymap.set
+  local function toggle_telescope(harpoon_files)
+    local file_paths = {}
 
-    -- добавить файл в список
-    map("n", "<leader>ha", function() harpoon:list():add() end,    { desc = "Harpoon add file" })
-    -- открыть меню со списком
-    map("n", "<leader>hh", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon menu" })
+    for _, item in ipairs(harpoon_files.items) do
+      table.insert(file_paths, item.value)
+    end
 
-    -- прыжки по номеру
-    map("n", "<leader>1", function() harpoon:list():select(1) end, { desc = "Harpoon file 1" })
-    map("n", "<leader>2", function() harpoon:list():select(2) end, { desc = "Harpoon file 2" })
-    map("n", "<leader>3", function() harpoon:list():select(3) end, { desc = "Harpoon file 3" })
-    map("n", "<leader>4", function() harpoon:list():select(4) end, { desc = "Harpoon file 4" })
-    map("n", "<leader>5", function() harpoon:list():select(4) end, { desc = "Harpoon file 5" })
-  end,
-}
+    require("telescope.pickers").new({}, {
+      prompt_title = "Harpoon",
+      finder = require("telescope.finders").new_table({
+        results = file_paths,
+      }),
+      previewer = conf.file_previewer({}),
+      sorter = conf.generic_sorter({}),
+    }):find()
+  end
+
+  harpoon:setup()
+
+  local map = vim.keymap.set
+
+  map("n", "<leader>ha", function()
+    harpoon:list():add()
+  end, { desc = "Harpoon: Add current file" })
+
+  map("n", "<leader>hh", function()
+    harpoon.ui:toggle_quick_menu(harpoon:list(), {
+      border = "rounded",
+      title = "Harpoon",
+      title_pos = "center",
+      ui_width_ratio = 0.5,
+      ui_max_width = 120,
+      height_in_lines = 10,
+    })
+  end, { desc = "Harpoon: Toggle quick menu" })
+
+  map("n", "<C-e>", function()
+    toggle_telescope(harpoon:list())
+  end, { desc = "Harpoon: Telescope menu" })
+
+  for i = 1, 5 do
+    map("n", "<leader>" .. i, function()
+      harpoon:list():select(i)
+    end, { desc = "Harpoon: Go to file " .. i })
+  end
+
+  map("n", "<C-S-N>", function()
+    harpoon:list():next()
+  end, { desc = "Harpoon: Next" })
+
+  map("n", "<C-S-P>", function()
+    harpoon:list():prev()
+  end, { desc = "Harpoon: Prev" })
+  
+end
+
+return { setup = setup }
